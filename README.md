@@ -1,6 +1,7 @@
 # expenseapp-backend
 
 ## To run code
+### npm install
 ### npm install nodemon
 ### nodemon index.js
 
