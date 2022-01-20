@@ -125,9 +125,7 @@ router.put('/updatebudget/:id', fetchuser, async (req, res) => {
     try {
         // Create a newNote object
         const newNote = {};
-        // if (name) { newNote.name = name };
-        // if (email) { newNote.email = email };
-        // if (password) { newNote.password = password };
+
         if (budget) { newNote.budget = budget };
 
         // Find the note to be updated and update it
