@@ -16,6 +16,7 @@ router.post('/createuser', [
     body('name', 'Name cannot be blank').isLength({ min: 3 }),
     body('email', 'Email cannot be blank').isEmail(),
     body('password', 'Password must be more than 6 character').isLength({ min: 5 }),
+    body('budget', 'Password must be more than 6 character').isLength({ min: 1 })
 
 ], async (req, res) => {
     let success = false;
@@ -40,6 +41,7 @@ router.post('/createuser', [
             name: req.body.name,
             email: req.body.email,
             password: secPass,
+            budget: req.body.budget,
         })
         const data = {
             user: {
@@ -117,5 +119,30 @@ router.post('/getuser', fetchuser, async (req, res) => {
 
 })
 
+// ROUTE 3: Update an existing Note using: PUT "/api/notes/updatenote". Login required
+router.put('/updatebudget/:id', fetchuser, async (req, res) => {
+    const { budget } = req.body;
+    try {
+        // Create a newNote object
+        const newNote = {};
+        // if (name) { newNote.name = name };
+        // if (email) { newNote.email = email };
+        // if (password) { newNote.password = password };
+        if (budget) { newNote.budget = budget };
+
+        // Find the note to be updated and update it
+        let note = await User.findById(req.params.id);
+        if (!note) { return res.status(404).send("Not Found") }
+
+        if (note.id.toString() !== req.user.id) {
+            return res.status(401).send("Not Allowed");
+        }
+        note = await User.findByIdAndUpdate(req.params.id, { $set: newNote }, { new: true })
+        res.json({ note });
+    } catch (error) {
+        console.error(error.message);
+        res.status(500).send("Internal Server Error");
+    }
+})
 
 module.exports = router
